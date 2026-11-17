@@ -1,0 +1,9 @@
+{
+  "creators": ["minolee.mp4", "kallaway", "devinjatho", "jessijeanhome", "martinwang.mp4", "sooweigoh", "niksetting", "calebralston", "floofysocials"],
+  "apify_actor": "data-slayer~instagram-stories-scraper",
+  "apify_max_usd_per_run": 0.15,
+  "notion_database_url": "https://app.notion.com/p/41b244e0b76681729897d754fb870e23",
+  "notion_data_source": "collection://41b244e0-b766-8177-891b-000b4f3b0b42",
+  "whisper_model": "small",
+  "timezone": "Europe/Rome"
+}
