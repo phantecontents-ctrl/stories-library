@@ -84,6 +84,15 @@ def frames_for(video, outdir, sid, duration):
     return paths
 
 
+def screen_for(video, outdir, sid, duration):
+    # uno screen leggibile della story (a ~40% della durata, 720 px di larghezza)
+    p = os.path.join(outdir, f"{sid}_screen.jpg")
+    t = (duration or 4) * 0.4
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.2f}", "-i", video,
+                    "-frames:v", "1", "-vf", "scale=720:-2", "-q:v", "3", p], check=False)
+    return p if os.path.exists(p) else None
+
+
 _model = None
 
 
@@ -202,6 +211,7 @@ def main():
             if download(v["url"], path):
                 rec["media"] = path
                 rec["frames"] = frames_for(path, d, sid, x.get("video_duration"))
+                rec["screen"] = screen_for(path, d, sid, x.get("video_duration"))
                 rec["trascrizione"] = transcribe(path, cfg["whisper_model"]) if x.get("has_audio") else ""
         else:
             imgs = (x.get("image_versions") or x.get("image_versions2") or {}).get("candidates") \
@@ -211,6 +221,7 @@ def main():
                 if download(imgs[0]["url"], path):
                     rec["media"] = path
                     rec["frames"] = [path]
+                    rec["screen"] = path
         if "media" not in rec:
             rec["errore_media"] = True
         manifest.append(rec)

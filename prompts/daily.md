@@ -51,11 +51,17 @@ Video: per ogni story, `notion-create-file-upload` (filename
 `<creator senza punti>_<id>.mp4`, NON passare content_type), poi
 `scripts/notion_upload.sh <upload_url> "<header authorization>" <file>`.
 Immagini: stessa cosa con il .jpg. Max 20 MiB per file.
+Screen: per ogni story carica anche il file `screen` del manifest (jpg), stesso
+procedimento (filename `<creator senza punti>_<id>_screen.jpg`). Se manca, usa il
+primo file di `frames`.
 
 Contenuto, in quest'ordine:
-1. Video **2 per riga**: `<columns><column ratio="50"><video source="file-upload://ID">Story 1</video></column><column ratio="50">…Story 2…</column></columns>`
-   (per le immagini `<image source="file-upload://ID">Story N</image>`).
-   Didascalie solo "Story N": mai scrivere nomi con ".mp4" (Notion li rende link).
+1. Story **2 per riga**; in ogni colonna prima lo **screen**, poi il video:
+   `<columns><column ratio="50"><image source="file-upload://SCREEN_ID">Screen story 1</image>
+
+<video source="file-upload://VIDEO_ID">Story 1</video></column><column ratio="50">…story 2…</column></columns>`
+   (per le stories foto basta l'immagine: `<image source="file-upload://ID">Story N</image>`).
+   Didascalie solo "Story N" / "Screen story N": mai scrivere nomi con ".mp4" (Notion li rende link).
    Numero dispari: ultima colonna con `<p />`.
 2. `## Struttura` + una riga in grassetto: `Blocco → Blocco → Blocco`.
 3. `## Riassunto`: 2-3 frasi.

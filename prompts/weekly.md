@@ -11,8 +11,9 @@ blocchi** (stesso ordine e funzione, anche con parole diverse) **e lo stesso
 Obiettivo**. Per ogni gruppo:
 - tieni la pagina più completa (o la più vecchia a parità);
 - nella pagina tenuta: unisci i Creator, `Volte vista` = somma, e aggiungi in
-  fondo i video dell'altra (copia i blocchi `<video source="notion-file-block://…">`
-  così come li restituisce fetch, sempre 2 per riga);
+  fondo screen e video dell'altra (copia i blocchi `<image …>` e
+  `<video source="notion-file-block://…">` così come li restituisce fetch,
+  sempre 2 story per riga, screen sopra il video);
 - l'altra pagina: `Stato` = Archiviata, `Motivo archivio` =
   "Unita a: <Idea della pagina tenuta>". **Mai cancellare.**
 
