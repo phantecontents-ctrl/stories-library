@@ -84,6 +84,28 @@ def frames_for(video, outdir, sid, duration):
     return paths
 
 
+NOTION_MAX = 4_700_000   # il workspace Notion accetta file fino a 5 MiB
+
+
+def fit_for_notion(video, duration):
+    """Se il video supera il limite di Notion, lo ricomprime al suo posto."""
+    if os.path.getsize(video) <= NOTION_MAX:
+        return
+    dur = max(float(duration or 0), 1.0)
+    for height, audio_k in ((1280, 96), (960, 64), (720, 48)):
+        kbps = max(int(NOTION_MAX * 8 / 1000 / dur * 0.9) - audio_k, 150)
+        tmp = video + ".tmp.mp4"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-vf", f"scale=-2:{height}",
+                        "-c:v", "libx264", "-preset", "veryfast", "-b:v", f"{kbps}k",
+                        "-maxrate", f"{kbps}k", "-bufsize", f"{kbps * 2}k",
+                        "-c:a", "aac", "-b:a", f"{audio_k}k", "-movflags", "+faststart", tmp], check=False)
+        if os.path.exists(tmp) and os.path.getsize(tmp) <= NOTION_MAX:
+            os.replace(tmp, video)
+            log(f"video ricompresso per Notion: {os.path.basename(video)}")
+            return
+    log(f"ATTENZIONE: {os.path.basename(video)} resta sopra 5 MiB")
+
+
 def screen_for(video, outdir, sid, duration):
     # uno screen leggibile della story (a ~40% della durata, 720 px di larghezza)
     p = os.path.join(outdir, f"{sid}_screen.jpg")
@@ -213,6 +235,7 @@ def main():
                 rec["frames"] = frames_for(path, d, sid, x.get("video_duration"))
                 rec["screen"] = screen_for(path, d, sid, x.get("video_duration"))
                 rec["trascrizione"] = transcribe(path, cfg["whisper_model"]) if x.get("has_audio") else ""
+                fit_for_notion(path, x.get("video_duration"))
         else:
             imgs = (x.get("image_versions") or x.get("image_versions2") or {}).get("candidates") \
                 or (x.get("image_versions") or {}).get("items") or []

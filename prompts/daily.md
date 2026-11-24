@@ -36,7 +36,8 @@ di `config.json` (lo script lo impone). Non alzare il tetto.
      Non riscrivere la pagina.
    - **Nuova**: crea la pagina (formato sotto).
 5. Solo dopo che TUTTE le pagine sono scritte: `python3 scripts/commit_state.py`
-   (aggiorna `state/last_seen.json` e fa push). Se il giro si blocca prima,
+   (aggiorna `state/last_seen.json` e fa push direttamente su `main`: non
+   fare commit o push dello stato in altro modo, né su altri branch). Se il giro si blocca prima,
    NON aggiornare lo stato: il giro dopo riprende dalle stesse stories.
 6. Fine. Nessun messaggio se tutto è andato bene.
 
@@ -50,7 +51,7 @@ quelle del database):
 Video: per ogni story, `notion-create-file-upload` (filename
 `<creator senza punti>_<id>.mp4`, NON passare content_type), poi
 `scripts/notion_upload.sh <upload_url> "<header authorization>" <file>`.
-Immagini: stessa cosa con il .jpg. Max 20 MiB per file.
+Immagini: stessa cosa con il .jpg. Limite Notion: 5 MiB per file (fetch.py ricomprime già i video più grandi).
 Screen: per ogni story carica anche il file `screen` del manifest (jpg), stesso
 procedimento (filename `<creator senza punti>_<id>_screen.jpg`). Se manca, usa il
 primo file di `frames`.
